@@ -1,6 +1,5 @@
 """Script to create an index file from my Zettelkasten notes (md files)"""
 from collections import defaultdict
-import os
 from pathlib import Path
 import re
 from typing import NamedTuple
