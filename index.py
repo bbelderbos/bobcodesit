@@ -6,7 +6,7 @@ import re
 from typing import NamedTuple
 
 INDEX_NAME = "index.md"
-NOTE_FILENAME_REGEX = re.compile(r"^\d.*\.md")
+NOTES_DIR = Path("notes")
 TAG_REGEX = re.compile(r"#\S+")
 HEADER = """# Bob's code tips archive
 
@@ -22,16 +22,13 @@ class Note(NamedTuple):
 
 
 def group_notes_by_tag(
-    directory: Path = Path.cwd()
+    directory: Path = Path.cwd() / NOTES_DIR
 ) -> defaultdict[str, list[Note]]:
     notes_grouped_by_tags = defaultdict(list)
 
-    filenames = os.listdir(directory)
+    filenames = directory.glob("*.md")
 
     for filename in filenames:
-        if not NOTE_FILENAME_REGEX.match(filename):
-            continue
-
         note_content = Path(filename).read_text()
         title = note_content.splitlines()[0].strip("# ")
         tag_lines = "\n".join(
@@ -43,7 +40,7 @@ def group_notes_by_tag(
         for tag in tags:
             tag = tag.lstrip("#").title()
             notes_grouped_by_tags[tag].append(
-                Note(title=title, filename=filename)
+                Note(title=title, filename=filename.name)
             )
 
     return notes_grouped_by_tags
