@@ -28,7 +28,7 @@ def group_notes_by_tag(
     filenames = directory.glob("*.md")
 
     for filename in filenames:
-        note_content = Path(filename).read_text()
+        note_content = filename.read_text()
         title = note_content.splitlines()[0].strip("# ")
         tag_lines = "\n".join(
             line for line in note_content.splitlines()
