@@ -54,7 +54,8 @@ def create_index(tag_index_tree: defaultdict[str, list[Note]]) -> None:
 
         for note in notes:
             title = note.title.capitalize()
-            output.append(f"- [{title}]({note.filename})\n")
+            note_filepath = NOTES_DIR / note.filename
+            output.append(f"- [{title}]({note_filepath})\n")
 
         output.append("\n\n")
 
