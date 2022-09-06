@@ -1,0 +1,9 @@
+repos:
+-   repo: local
+    hooks:
+      - id: create-index
+        name: create-index
+        entry: bash -c 'venv/bin/python index.py && git add index.md'
+        language: system
+        types: [python]
+        always_run: true
