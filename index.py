@@ -52,7 +52,7 @@ def create_index(tag_index_tree: defaultdict[str, list[Note]]) -> None:
         tag = tag.lower().capitalize()
         output.append(f"## {tag}\n\n")
 
-        for note in notes:
+        for note in sorted(notes):
             title = note.title.capitalize()
             note_filepath = NOTES_DIR / note.filename
             output.append(f"- [{title}]({note_filepath})\n")
