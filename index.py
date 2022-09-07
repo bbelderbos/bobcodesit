@@ -29,7 +29,7 @@ def group_notes_by_tag(
 
     for filename in filenames:
         note_content = filename.read_text()
-        title = note_content.splitlines()[0].strip("# ")
+        title = note_content.splitlines()[0].strip("# ").capitalize()
         tag_lines = "\n".join(
             line for line in note_content.splitlines()
             if line.startswith("#")
@@ -53,11 +53,10 @@ def create_index(tag_index_tree: defaultdict[str, list[Note]]) -> None:
         output.append(f"## {tag}\n\n")
 
         for note in sorted(notes):
-            title = note.title.capitalize()
             note_filepath = NOTES_DIR / note.filename
-            output.append(f"- [{title}]({note_filepath})\n")
+            output.append(f"- [{note.title}]({note_filepath})\n")
 
-        output.append("\n\n")
+        output.append("\n")
 
     with open(INDEX_NAME, "w") as f:
         f.write("".join(output))
