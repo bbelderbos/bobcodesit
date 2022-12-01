@@ -60,7 +60,8 @@ def get_latest_tips(
     """
     goback_limit = datetime.datetime.now() - datetime.timedelta(hours=look_hours_back)
     latest_tips = [
-        tip_file for tip_file in tips_dir.glob("*.md")
+        tip_file
+        for tip_file in tips_dir.glob("*.md")
         if _extract_dt(tip_file) >= goback_limit
     ]
     return latest_tips
@@ -87,7 +88,7 @@ def parse_tip_file(tip_file: pathlib.Path) -> Tip:
 
     title = lines[0].lstrip("# ")
     description = "\n".join(lines[start_description_line:start_line]).strip()
-    code = "\n".join(lines[start_line + 1: end_line]).strip()
+    code = "\n".join(lines[start_line + 1 : end_line]).strip()
 
     return Tip(title=title, description=description, code=code)
 

@@ -29,7 +29,7 @@ def create_notes(notes_dir):
     notes = (
         "# Pybites productivity tips\n\nblabla\n\n#productivity #Python",
         "# enumerate\n\nfor i, line in enumerate(lines, start=1):\n\n#python",
-        "# pathlib\n\nyou can use home() and cwd() on a Path object\n\n#python"
+        "# pathlib\n\nyou can use home() and cwd() on a Path object\n\n#python",
     )
     for i, note in enumerate(notes):
         file = notes_dir / f"{note_base}{i}.md"

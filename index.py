@@ -21,7 +21,7 @@ class Note(NamedTuple):
 
 
 def group_notes_by_tag(
-    directory: Path = Path.cwd() / NOTES_DIR
+    directory: Path = Path.cwd() / NOTES_DIR,
 ) -> defaultdict[str, list[Note]]:
     notes_grouped_by_tags = defaultdict(list)
 
@@ -31,16 +31,13 @@ def group_notes_by_tag(
         note_content = filename.read_text()
         title = note_content.splitlines()[0].strip("# ").capitalize()
         tag_lines = "\n".join(
-            line for line in note_content.splitlines()
-            if line.startswith("#")
+            line for line in note_content.splitlines() if line.startswith("#")
         )
         tags = re.findall(TAG_REGEX, tag_lines)
 
         for tag in tags:
             tag = tag.lstrip("#").title()
-            notes_grouped_by_tags[tag].append(
-                Note(title=title, filename=filename.name)
-            )
+            notes_grouped_by_tags[tag].append(Note(title=title, filename=filename.name))
 
     return notes_grouped_by_tags
 
