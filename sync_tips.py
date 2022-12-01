@@ -88,7 +88,7 @@ def parse_tip_file(tip_file: pathlib.Path) -> Tip:
 
     title = lines[0].lstrip("# ")
     description = "\n".join(lines[start_description_line:start_line]).strip()
-    code = "\n".join(lines[start_line + 1 : end_line]).strip()
+    code = "\n".join(lines[start_line + 1: end_line]).strip()
 
     return Tip(title=title, description=description, code=code)
 
