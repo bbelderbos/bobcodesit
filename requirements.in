@@ -1,3 +1,7 @@
 requests
 python-dotenv
+# dev
+freezegun
 pytest
+mypy
+flake8

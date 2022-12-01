@@ -1,6 +1,10 @@
-import pytest
+import os
+import pathlib
 
-from sync_tips import parse_tip_file, Tip
+import pytest
+from freezegun import freeze_time
+
+from sync_tips import Tip, parse_tip_file, get_latest_tips
 
 note1_content = """# Some title
 
@@ -41,6 +45,11 @@ expected_tip2 = Tip(
     code='>>> print("hello")',
 )
 
+files = """20221130102028.md
+20221130102010.md
+20221201102028.md
+20221201134231.md"""
+
 
 @pytest.fixture
 def note1(tmp_path):
@@ -56,6 +65,16 @@ def note2(tmp_path):
     return note_path
 
 
+@pytest.fixture
+def note_files(tmpdir_factory):
+    # casting because LocalPath does not have touch()
+    notes_dir = pathlib.Path(tmpdir_factory.mktemp("notes"))
+    for file in files.split():
+        (notes_dir / file).touch()
+    assert len(os.listdir(notes_dir)) == 4
+    return notes_dir
+
+
 @pytest.mark.parametrize(
     "file, expected",
     [
@@ -67,3 +86,29 @@ def test_parsing_note_files(request, file, expected):
     note_file = request.getfixturevalue(file)
     actual = parse_tip_file(note_file)
     assert actual == expected
+
+
+@freeze_time("2022-12-1")
+def test_all_new_tips(note_files):
+    actual = get_latest_tips(tips_dir=note_files)
+    # 20221130 and 20221201 tips
+    assert [p.stem for p in actual] == [
+        "20221130102028",
+        "20221201102028",
+        "20221201134231",
+        "20221130102010",
+    ]
+
+
+@freeze_time("2022-12-2")
+def test_two_new_tips(note_files):
+    actual = get_latest_tips(tips_dir=note_files)
+    # only 20221201 tips
+    assert [p.stem for p in actual] == ["20221201102028", "20221201134231"]
+
+
+@freeze_time("2022-12-3")
+def test_no_new_tips(note_files):
+    actual = get_latest_tips(tips_dir=note_files)
+    # no tips, they are all outdated
+    assert [p.stem for p in actual] == []
