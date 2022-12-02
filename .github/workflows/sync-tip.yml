@@ -1,6 +1,5 @@
 name: Daily code tip sync
 on:
-  push:
   schedule:
     # CET so 17.45 Spain time, have tips synced before logging off :)
     - cron: "45 16 * * *"
