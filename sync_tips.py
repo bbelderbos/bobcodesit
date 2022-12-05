@@ -104,7 +104,6 @@ def main(args):
 
     latest_tips = get_latest_tips()
 
-    failed = False
     for tip_file in latest_tips:
         tip = parse_tip_file(tip_file)
 
@@ -121,13 +120,9 @@ def main(args):
         try:
             response.raise_for_status()
         except requests.exceptions.HTTPError as exc:
-            failed = True
             print(f"Error: {exc}")
         else:
             print("OK")
-
-    if failed:
-        sys.exit("Not all tips posted successfully to API")
 
 
 if __name__ == "__main__":
