@@ -83,6 +83,11 @@ def parse_tip_file(tip_file: pathlib.Path) -> Tip:
     lines = tip_file.read_text().splitlines()
 
     code_block_indices = [i for i, line in enumerate(lines) if line.strip() == "```"]
+
+    # if there are multiple code blocks, take the first one
+    if len(code_block_indices) > 2:
+        code_block_indices = code_block_indices[:2]
+
     start_line, end_line = code_block_indices
     start_description_line = 2
 
