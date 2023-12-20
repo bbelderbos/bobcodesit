@@ -81,19 +81,22 @@ def parse_tip_file(tip_file: pathlib.Path) -> Tip:
     #one_or_more_tags
     """
     lines = tip_file.read_text().splitlines()
-
-    code_block_indices = [i for i, line in enumerate(lines) if line.strip() == "```"]
-
-    # if there are multiple code blocks, take the first one
-    if len(code_block_indices) > 2:
-        code_block_indices = code_block_indices[:2]
-
-    start_line, end_line = code_block_indices
+    title = lines[0].lstrip("# ")
     start_description_line = 2
 
-    title = lines[0].lstrip("# ")
-    description = "\n".join(lines[start_description_line:start_line]).strip()
-    code = "\n".join(lines[start_line + 1: end_line]).strip()
+    code_block_indices = [i for i, line in enumerate(lines) if line.strip() == "```"]
+    if code_block_indices:
+        # if there are multiple code blocks, take the first one
+        if len(code_block_indices) > 2:
+            code_block_indices = code_block_indices[:2]
+
+        start_line, end_line = code_block_indices
+
+        description = "\n".join(lines[start_description_line:start_line]).strip()
+        code = "\n".join(lines[start_line + 1: end_line]).strip()
+    else:
+        description = "\n".join(lines[start_description_line:len(lines)]).strip()
+        code = ""
 
     return Tip(title=title, description=description, code=code)
 
