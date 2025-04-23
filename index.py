@@ -20,6 +20,18 @@ class Note(NamedTuple):
     filename: str
 
 
+def _filter_valid_tag_lines(filename, lines: list[str]) -> list[str]:
+    in_code_block = False
+    tag_lines = []
+    for line in lines:
+        if line.strip().startswith("```"):
+            in_code_block = not in_code_block
+            continue
+        if not in_code_block and line.startswith("#"):
+            tag_lines.append(line)
+    return tag_lines
+
+
 def group_notes_by_tag(
     directory: Path = Path.cwd() / NOTES_DIR,
 ) -> defaultdict[str, list[Note]]:
@@ -29,11 +41,11 @@ def group_notes_by_tag(
 
     for filename in filenames:
         note_content = filename.read_text()
-        title = note_content.splitlines()[0].strip("# ").capitalize()
-        tag_lines = "\n".join(
-            line for line in note_content.splitlines() if line.startswith("#")
-        )
-        tags = re.findall(TAG_REGEX, tag_lines)
+        lines = note_content.splitlines()
+        title = lines.pop(0).strip("# ").capitalize()
+        no_code_lines = _filter_valid_tag_lines(str(filename), lines)
+        tag_content = "\n".join(no_code_lines)
+        tags = re.findall(TAG_REGEX, tag_content)
 
         for tag in tags:
             tag = tag.lstrip("#").title()
