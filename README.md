@@ -1,4 +1,4 @@
-# Bobcodesit
+# Bobcodesit code snippet repo
 
 Coding tips (mainly Python) I share on social media 💪🐍
 
