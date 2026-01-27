@@ -60,3 +60,15 @@ def test_tags_inside_code_blocks_are_ignored(notes_dir):
 
     assert "Include" not in tag_index_tree
     assert "Clang" in tag_index_tree
+
+
+def test_note_with_multiple_tags_uses_first_tag_only(notes_dir):
+    """Notes should only be indexed under their first tag to avoid duplicates."""
+    note = notes_dir / "20220817104444.md"
+    note.write_text("# Multi-tag note\n\nContent here\n\n#first #second #third\n")
+    tag_index_tree = group_notes_by_tag(notes_dir)
+
+    assert "First" in tag_index_tree
+    assert "Second" not in tag_index_tree
+    assert "Third" not in tag_index_tree
+    assert len(tag_index_tree["First"]) == 1
