@@ -48,9 +48,11 @@ def group_notes_by_tag(
         tag_content = "\n".join(no_code_lines)
         tags = re.findall(TAG_REGEX, tag_content)
 
-        for tag in tags:
-            tag = tag.lstrip("#").title()
-            notes_grouped_by_tags[tag].append(Note(title=title, filename=filename.name))
+        if tags:
+            first_tag = tags[0].lstrip("#").title()
+            notes_grouped_by_tags[first_tag].append(
+                Note(title=title, filename=filename.name)
+            )
 
     return notes_grouped_by_tags
 
