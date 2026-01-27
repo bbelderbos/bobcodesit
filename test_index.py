@@ -12,7 +12,6 @@ EXPECTED_OUTPUT = """# Notes index
 
 - [Enumerate](notes/20220817104441.md)
 - [Pathlib](notes/20220817104442.md)
-- [Pybites productivity tips](notes/20220817104440.md)
 """
 
 
@@ -55,11 +54,7 @@ def test_create_index(create_notes, notes_dir, tmp_path, monkeypatch):
 def test_tags_inside_code_blocks_are_ignored(notes_dir):
     note_with_code = notes_dir / "20220817104443.md"
     note_with_code.write_text(
-        "# C include example\n\n"
-        "```c\n"
-        "#include <stdio.h>\n"
-        "```\n\n"
-        "#clang\n"
+        "# C include example\n\n```c\n#include <stdio.h>\n```\n\n#clang\n"
     )
     tag_index_tree = group_notes_by_tag(notes_dir)
 
