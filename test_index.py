@@ -37,7 +37,8 @@ def create_notes(notes_dir):
             f.write(note + "\n")
 
 
-def test_create_index(create_notes, notes_dir):
+def test_create_index(create_notes, notes_dir, tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
     tag_index_tree = group_notes_by_tag(notes_dir)
     create_index(tag_index_tree)
 
