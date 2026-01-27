@@ -49,3 +49,18 @@ def test_create_index(create_notes, notes_dir):
     expected = EXPECTED_OUTPUT.splitlines()[2:]
 
     assert actual == expected
+
+
+def test_tags_inside_code_blocks_are_ignored(notes_dir):
+    note_with_code = notes_dir / "20220817104443.md"
+    note_with_code.write_text(
+        "# C include example\n\n"
+        "```c\n"
+        "#include <stdio.h>\n"
+        "```\n\n"
+        "#clang\n"
+    )
+    tag_index_tree = group_notes_by_tag(notes_dir)
+
+    assert "Include" not in tag_index_tree
+    assert "Clang" in tag_index_tree
