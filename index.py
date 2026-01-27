@@ -1,4 +1,5 @@
 """Script to create an index file from my Zettelkasten notes (md files)"""
+
 from collections import defaultdict
 from pathlib import Path
 import re
@@ -47,9 +48,11 @@ def group_notes_by_tag(
         tag_content = "\n".join(no_code_lines)
         tags = re.findall(TAG_REGEX, tag_content)
 
-        for tag in tags:
-            tag = tag.lstrip("#").title()
-            notes_grouped_by_tags[tag].append(Note(title=title, filename=filename.name))
+        if tags:
+            first_tag = tags[0].lstrip("#").title()
+            notes_grouped_by_tags[first_tag].append(
+                Note(title=title, filename=filename.name)
+            )
 
     return notes_grouped_by_tags
 
@@ -71,6 +74,6 @@ def create_index(tag_index_tree: defaultdict[str, list[Note]]) -> None:
         f.write("".join(output))
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     tag_index_tree = group_notes_by_tag()
     create_index(tag_index_tree)
