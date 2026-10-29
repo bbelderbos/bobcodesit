@@ -28,7 +28,7 @@ def _filter_valid_tag_lines(filename, lines: list[str]) -> list[str]:
         if line.strip().startswith("```"):
             in_code_block = not in_code_block
             continue
-        if not in_code_block and line.startswith("#"):
+        if not in_code_block and re.match(r"#\w", line):
             tag_lines.append(line)
     return tag_lines
 
